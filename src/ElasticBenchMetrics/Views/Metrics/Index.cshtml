@@ -1,4 +1,7 @@
-﻿<h1 class="page-header">Metrics Overview</h1>
+﻿@using ElasticBenchMetrics.ViewModels
+
+@model MetricsOverview
+<h1 class="page-header">Metrics Overview</h1>
 
 <h2>Nova</h2>
 <table class="table table-striped table-bordered table-condensed" style="margin-top: 20px">
@@ -6,36 +9,39 @@
         <tr>
             <th>Metric</th>
             <th>Threshold</th>
-            <th>Data</th>
-            <th>Trend (Last 30 days)</th>
+            <th>Last 24 Hours</th>
+            <th>Last 30 days</th>
         </tr>
     </thead>
     <tr>
         <td>Synthetic Median Build Time</td>
         <td>45 seconds</td>
-        <td><span class="label label-success">1</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastDay.MedianTime</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastMonth.MedianTime</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Build Time</td>
         <td>45 seconds</td>
-        <td><span class="label label-success">1</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastDay.NinetyFifthPercentileTime</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastMonth.NinetyFifthPercentileTime</span></td>
     </tr>
     <tr>
         <td>Synthetic Build Failure %</td>
         <td>2.00%</td>
-        <td><span class="label label-success">1</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastDay.FailurePercentage%</span></td>
+        <td><span class="label label-success">@Model.NovaBootServer.LastMonth.FailurePercentage%</span></td>
     </tr>
     <tr>
-        <td>Time to Build 25 Instances</td>
+        <td>Time to Build 5 Instances</td>
         <td>2 minutes, 30 seconds</td>
-        <td></td>
-        <td></td>
+        <td>@Model.NovaBootServerStress.LastDay.MedianTime</td>
+        <td>@Model.NovaBootServerStress.LastMonth.MedianTime</td>
     </tr>
     <tr>
-        <td>Build Failure % for 25 Instances</td>
+        <td>Build Failure % for 5 Instances</td>
         <td>1.00%</td>
-        <td></td>
-        <td></td>
+        <td>@Model.NovaBootServerStress.LastDay.FailurePercentage</td>
+        <td>@Model.NovaBootServerStress.LastMonth.FailurePercentage</td>
     </tr>
 </table>
 
@@ -45,10 +51,46 @@
         <tr>
             <th>Metric</th>
             <th>Threshold</th>
-            <th>Data</th>
-            <th>Trend (Last 30 days)</th>
+            <th>Last 24 Hours</th>
+            <th>Last 30 days</th>
         </tr>
     </thead>
+    <tr>
+        <td>Synthetic Median Create Volume Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastDay.MedianTime</span></td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastMonth.MedianTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic 95th Percentile Create Volume Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileTime</span></td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastMonth.NinetyFifthPercentileTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic Create Volume Failure %</td>
+        <td>2.00%</td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastDay.FailurePercentage%</span></td>
+        <td><span class="label label-success">@Model.CinderCreateVolume.LastMonth.FailurePercentage%</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic Median Delete Volume Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastDay.MedianTime</span></td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastMonth.MedianTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic 95th Percentile Delete Volume Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileTime</span></td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastMonth.NinetyFifthPercentileTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic Delete Volume Failure %</td>
+        <td>2.00%</td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastDay.FailurePercentage%</span></td>
+        <td><span class="label label-success">@Model.CinderDeleteVolume.LastMonth.FailurePercentage%</span></td>
+    </tr>
 </table>
 
 <h2>Keystone</h2>
@@ -57,8 +99,8 @@
         <tr>
             <th>Metric</th>
             <th>Threshold</th>
-            <th>Data</th>
-            <th>Trend (Last 30 days)</th>
+            <th>Last 24 Hours</th>
+            <th>Last 30 days</th>
         </tr>
     </thead>
 </table>
@@ -69,8 +111,26 @@
         <tr>
             <th>Metric</th>
             <th>Threshold</th>
-            <th>Data</th>
-            <th>Trend (Last 30 days)</th>
+            <th>Last 24 Hours</th>
+            <th>Last 30 days</th>
         </tr>
     </thead>
+    <tr>
+        <td>Synthetic Median Create Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastDay.MedianTime</span></td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastMonth.MedianTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic 95th Percentile Create Time</td>
+        <td>45 seconds</td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileTime</span></td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastMonth.NinetyFifthPercentileTime</span></td>
+    </tr>
+    <tr>
+        <td>Synthetic Create Failure %</td>
+        <td>2.00%</td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastDay.FailurePercentage%</span></td>
+        <td><span class="label label-success">@Model.GlanceCreateImage.LastMonth.FailurePercentage%</span></td>
+    </tr>
 </table>
