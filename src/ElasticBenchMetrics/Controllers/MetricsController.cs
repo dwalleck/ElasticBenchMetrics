@@ -7,6 +7,9 @@ using Nest;
 using ElasticBenchMetrics.Models;
 using Humanizer;
 using ElasticBenchMetrics.ViewModels;
+using Microsoft.Extensions.Configuration;
+using ElasticBenchMetrics.Configuration;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,20 +19,24 @@ namespace ElasticBenchMetrics.Controllers
     {
         public ElasticClient _client { get; set; }
 
-        public MetricsController()
+        public MetricsController(IConfigurationRoot configuration)
         {
-            var elasticSearchUrl = "http://104.239.169.115:443";
-            var indexName = "osa_demo_elastic_benchmark_results";
+            var elasticSearchUrl = configuration["ElasticSearch:Host"];
+            var indexName = configuration["ElasticSearch:IndexName"];
             var settings = new ConnectionSettings(new Uri(elasticSearchUrl))
                 .DefaultIndex(indexName);
-            settings.BasicAuthentication("elasticbench", "Vj9uMFuy7qHm");
-            _client = new ElasticClient(settings);
+            settings.BasicAuthentication(
+                configuration["ElasticSearch:Username"],
+                configuration["ElasticSearch:Password"]);
+            _client = new ElasticClient(settings);  
         }
 
         // GET: /<controller>/
         public IActionResult Index()
         {
-            var timePeriods = new List<int> { -1, -30 };
+            var lastDay = -5;
+            var lastMonth = -30;
+            var timePeriods = new List<int> { lastDay, lastMonth };
             var resultHistories = new List<ResultSummary>();
             var metricsOverview = new MetricsOverview
             {
@@ -44,7 +51,7 @@ namespace ElasticBenchMetrics.Controllers
             foreach (var period in timePeriods)
             {
                 var response = _client.Search<BenchmarkResult>(s => s
-                    .Size(5000)
+                    .Size(10000)
                     .Query(q => q
                         .DateRange(d => d
                             .Field(f => f.RunAt).GreaterThanOrEquals(DateTime.Today.AddDays(period))))
@@ -71,10 +78,13 @@ namespace ElasticBenchMetrics.Controllers
                         var summary = new ResultSummary
                         {
                             MedianTime = medianBootTime.Humanize(2),
+                            MedianThresholdStatus = "success",
                             NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = failurePercentage.ToString("F")
+                            NinetyFifthPercentileStatus = "success",
+                            FailurePercentage = failurePercentage.ToString("F"),
+                            FailureThresholdStatus = "success"
                         };
-                        if (period == -1)
+                        if (period == lastDay)
                         {
                             metricsOverview.NovaBootServer.LastDay = summary;
                         }
@@ -86,7 +96,7 @@ namespace ElasticBenchMetrics.Controllers
                     }
                     else if (scenarioName == "NovaServers.boot_and_delete_server_stress")
                     {
-                        // Filter for only benchmarks
+                        // Filter for only stress tests
                         var stressScenarios = resultGroup.Where(r => r.TestType == "stress_test");
                         var sortedScenarioTimes = stressScenarios.OrderBy(o => o.TotalRuntime).ToList();
                         var medianScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime);
@@ -98,10 +108,13 @@ namespace ElasticBenchMetrics.Controllers
                         {
                             MedianTime = medianScenarioTime.Humanize(2),
                             NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = scenarioFailurePercentage.ToString("F")
+                            FailurePercentage = scenarioFailurePercentage.ToString("F"),
+                            MedianThresholdStatus = "success",
+                            NinetyFifthPercentileStatus = "success",
+                            FailureThresholdStatus = "success"
                         };
 
-                        if (period == -1)
+                        if (period == lastDay)
                         {
                             metricsOverview.NovaBootServerStress.LastDay = summary;
                         }
@@ -125,10 +138,13 @@ namespace ElasticBenchMetrics.Controllers
                         {
                             MedianTime = medianBootTime.Humanize(2),
                             NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = failurePercentage.ToString("F")
+                            FailurePercentage = failurePercentage.ToString("F"),
+                            MedianThresholdStatus = "success",
+                            NinetyFifthPercentileStatus = "success",
+                            FailureThresholdStatus = "success"
                         };
 
-                        if (period == -1)
+                        if (period == lastDay)
                         {
                             metricsOverview.GlanceCreateImage.LastDay = summary;
                         }
@@ -153,7 +169,10 @@ namespace ElasticBenchMetrics.Controllers
                         {
                             MedianTime = medianBootTime.Humanize(2),
                             NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = failurePercentage.ToString("F")
+                            FailurePercentage = failurePercentage.ToString("F"),
+                            MedianThresholdStatus = "success",
+                            NinetyFifthPercentileStatus = "success",
+                            FailureThresholdStatus = "success"
                         };
 
                         var sortedDeletedTimes = scenarios.OrderBy(o => o.AtomicActions["cinder:delete_volume"]).ToList();
@@ -166,10 +185,13 @@ namespace ElasticBenchMetrics.Controllers
                         {
                             MedianTime = medianDeleteTime.Humanize(2),
                             NinetyFifthPercentileTime = outlierDeleteTime.Humanize(2),
-                            FailurePercentage = failureDeletePercentage.ToString("F")
+                            FailurePercentage = failureDeletePercentage.ToString("F"),
+                            MedianThresholdStatus = "success",
+                            NinetyFifthPercentileStatus = "success",
+                            FailureThresholdStatus = "success"
                         };
 
-                        if (period == -1)
+                        if (period == lastDay)
                         {
                             metricsOverview.CinderCreateVolume.LastDay = createSummary;
                             metricsOverview.CinderDeleteVolume.LastDay = deleteSummary;
@@ -180,7 +202,35 @@ namespace ElasticBenchMetrics.Controllers
                             metricsOverview.CinderDeleteVolume.LastMonth = deleteSummary;
                         }
                     }
+                    else if (scenarioName == "Authenticate.keystone")
+                    {
+                        // Filter for only stress tests
+                        var stressScenarios = resultGroup.Where(r => r.TestType == "stress_test");
+                        var sortedScenarioTimes = stressScenarios.OrderBy(o => o.TotalRuntime).ToList();
+                        var medianScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime);
+                        var scenarioFailurePercentage = (stressScenarios.Where(s => s.Result == "fail").Count() * 100.0) / stressScenarios.Count();
+                        var outlierScenarioTimeIndex = (int)(Math.Ceiling(sortedScenarioTimes.Count * 0.95) - 1);
+                        var outlierScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(outlierScenarioTimeIndex).TotalRuntime);
 
+                        var summary = new ResultSummary
+                        {
+                            MedianTime = medianScenarioTime.Humanize(2),
+                            NinetyFifthPercentileTime = outlierScenarioTime.Humanize(2),
+                            FailurePercentage = scenarioFailurePercentage.ToString("F"),
+                            MedianThresholdStatus = "success",
+                            NinetyFifthPercentileStatus = "success",
+                            FailureThresholdStatus = "success"
+                        };
+
+                        if (period == lastDay)
+                        {
+                            metricsOverview.KeystoneAuthenticateStress.LastDay = summary;
+                        }
+                        else
+                        {
+                            metricsOverview.KeystoneAuthenticateStress.LastMonth = summary;
+                        }
+                    }
                     else
                     {
                         continue;

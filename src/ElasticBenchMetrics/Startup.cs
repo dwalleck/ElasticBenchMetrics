@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using ElasticBenchMetrics.Configuration;
 
 namespace ElasticBenchMetrics
 {
@@ -18,8 +19,14 @@ namespace ElasticBenchMetrics
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets();
+            }
+
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
