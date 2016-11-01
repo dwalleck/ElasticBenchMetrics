@@ -15,33 +15,33 @@
     </thead>
     <tr>
         <td>Synthetic Median Build Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.NovaBootServer.LastDay.MedianThresholdStatus">@Model.NovaBootServer.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.NovaBootServer.LastMonth.MedianThresholdStatus">@Model.NovaBootServer.LastMonth.MedianTime</span></td>
+        <td>@Model.NovaBootServer.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.NovaBootServer.LastDay.MedianThresholdStatus()">@Model.NovaBootServer.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.NovaBootServer.LastMonth.MedianThresholdStatus()">@Model.NovaBootServer.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Build Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.NovaBootServer.LastDay.NinetyFifthPercentileStatus">@Model.NovaBootServer.LastDay.NinetyFifthPercentileTime</span></td>
-        <td><span class="label label-@Model.NovaBootServer.LastMonth.NinetyFifthPercentileStatus">@Model.NovaBootServer.LastMonth.NinetyFifthPercentileTime</span></td>
+        <td>@Model.NovaBootServer.LastDay.NinetyFifthPercentileTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.NovaBootServer.LastDay.NinetyFifthPercentileStatus()">@Model.NovaBootServer.LastDay.NinetyFifthPercentileTime()</span></td>
+        <td><span class="label label-@Model.NovaBootServer.LastMonth.NinetyFifthPercentileStatus()">@Model.NovaBootServer.LastMonth.NinetyFifthPercentileTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic Build Failure %</td>
-        <td>2.00%</td>
-        <td><span class="label label-@Model.NovaBootServer.LastDay.FailureThresholdStatus">@Model.NovaBootServer.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.NovaBootServer.LastMonth.FailureThresholdStatus">@Model.NovaBootServer.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.NovaBootServer.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.NovaBootServer.LastDay.FailureThresholdStatus()">@Model.NovaBootServer.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.NovaBootServer.LastMonth.FailureThresholdStatus()">@Model.NovaBootServer.LastMonth.FailurePercentage()%</span></td>
     </tr>
     <tr>
         <td>Time to Build 5 Instances</td>
-        <td>2 minutes, 30 seconds</td>
-        <td><span class="label label-@Model.NovaBootServerStress.LastDay.MedianThresholdStatus">@Model.NovaBootServerStress.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.NovaBootServerStress.LastMonth.MedianThresholdStatus">@Model.NovaBootServerStress.LastMonth.MedianTime</span></td>
+        <td>@Model.NovaBootServerStress.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.NovaBootServerStress.LastDay.MedianThresholdStatus()">@Model.NovaBootServerStress.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.NovaBootServerStress.LastMonth.MedianThresholdStatus()">@Model.NovaBootServerStress.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Build Failure % for 5 Instances</td>
-        <td>1.00%</td>
-        <td><span class="label label-@Model.NovaBootServerStress.LastDay.FailureThresholdStatus">@Model.NovaBootServerStress.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.NovaBootServerStress.LastMonth.FailureThresholdStatus">@Model.NovaBootServerStress.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.NovaBootServerStress.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.NovaBootServerStress.LastDay.FailureThresholdStatus()">@Model.NovaBootServerStress.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.NovaBootServerStress.LastMonth.FailureThresholdStatus()">@Model.NovaBootServerStress.LastMonth.FailurePercentage()%</span></td>
     </tr>
 </table>
 
@@ -57,39 +57,39 @@
     </thead>
     <tr>
         <td>Synthetic Median Create Volume Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastDay.MedianThresholdStatus">@Model.CinderCreateVolume.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.MedianThresholdStatus">@Model.CinderCreateVolume.LastMonth.MedianTime</span></td>
+        <td>@Model.CinderCreateVolume.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastDay.MedianThresholdStatus()">@Model.CinderCreateVolume.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.MedianThresholdStatus()">@Model.CinderCreateVolume.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Create Volume Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileStatus">@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileTime</span></td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.NinetyFifthPercentileStatus">@Model.CinderCreateVolume.LastMonth.NinetyFifthPercentileTime</span></td>
+        <td>@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileStatus()">@Model.CinderCreateVolume.LastDay.NinetyFifthPercentileTime()</span></td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.NinetyFifthPercentileStatus()">@Model.CinderCreateVolume.LastMonth.NinetyFifthPercentileTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic Create Volume Failure %</td>
-        <td>2.00%</td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastDay.FailureThresholdStatus">@Model.CinderCreateVolume.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.FailureThresholdStatus">@Model.CinderCreateVolume.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.CinderCreateVolume.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastDay.FailureThresholdStatus()">@Model.CinderCreateVolume.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.CinderCreateVolume.LastMonth.FailureThresholdStatus()">@Model.CinderCreateVolume.LastMonth.FailurePercentage()%</span></td>
     </tr>
     <tr>
         <td>Synthetic Median Delete Volume Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.MedianThresholdStatus">@Model.CinderDeleteVolume.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.MedianThresholdStatus">@Model.CinderDeleteVolume.LastMonth.MedianTime</span></td>
+        <td>@Model.CinderDeleteVolume.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.MedianThresholdStatus()">@Model.CinderDeleteVolume.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.MedianThresholdStatus()">@Model.CinderDeleteVolume.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Delete Volume Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileStatus">@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileTime</span></td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.NinetyFifthPercentileStatus">@Model.CinderDeleteVolume.LastMonth.NinetyFifthPercentileTime</span></td>
+        <td>@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileStatus()">@Model.CinderDeleteVolume.LastDay.NinetyFifthPercentileTime()</span></td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.NinetyFifthPercentileStatus()">@Model.CinderDeleteVolume.LastMonth.NinetyFifthPercentileTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic Delete Volume Failure %</td>
-        <td>2.00%</td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.FailureThresholdStatus">@Model.CinderDeleteVolume.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.FailureThresholdStatus">@Model.CinderDeleteVolume.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.CinderDeleteVolume.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastDay.FailureThresholdStatus()">@Model.CinderDeleteVolume.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.CinderDeleteVolume.LastMonth.FailureThresholdStatus()">@Model.CinderDeleteVolume.LastMonth.FailurePercentage()%</span></td>
     </tr>
 </table>
 
@@ -105,21 +105,21 @@
     </thead>
     <tr>
         <td>Median Time to Authenticate 100 Times Concurrently</td>
-        <td>2 minutes, 30 seconds</td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.MedianThresholdStatus">@Model.KeystoneAuthenticateStress.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.MedianThresholdStatus">@Model.KeystoneAuthenticateStress.LastMonth.MedianTime</span></td>
+        <td>@Model.KeystoneAuthenticateStress.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.MedianThresholdStatus()">@Model.KeystoneAuthenticateStress.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.MedianThresholdStatus()">@Model.KeystoneAuthenticateStress.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Time to Authenticate 100 Times Concurrently</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.NinetyFifthPercentileStatus">@Model.KeystoneAuthenticateStress.LastDay.NinetyFifthPercentileTime</span></td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.NinetyFifthPercentileStatus">@Model.KeystoneAuthenticateStress.LastMonth.NinetyFifthPercentileTime</span></td>
+        <td>@Model.KeystoneAuthenticateStress.LastDay.NinetyFifthPercentileTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.NinetyFifthPercentileStatus()">@Model.KeystoneAuthenticateStress.LastDay.NinetyFifthPercentileTime()</span></td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.NinetyFifthPercentileStatus()">@Model.KeystoneAuthenticateStress.LastMonth.NinetyFifthPercentileTime()</span></td>
     </tr>
     <tr>
         <td>Failure % for Authenticating 100 Times Concurrently</td>
-        <td>1.00%</td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.FailureThresholdStatus">@Model.KeystoneAuthenticateStress.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.FailureThresholdStatus">@Model.KeystoneAuthenticateStress.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.KeystoneAuthenticateStress.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastDay.FailureThresholdStatus()">@Model.KeystoneAuthenticateStress.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.KeystoneAuthenticateStress.LastMonth.FailureThresholdStatus()">@Model.KeystoneAuthenticateStress.LastMonth.FailurePercentage()%</span></td>
     </tr>
 </table>
 
@@ -135,20 +135,20 @@
     </thead>
     <tr>
         <td>Synthetic Median Create Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastDay.MedianThresholdStatus">@Model.GlanceCreateImage.LastDay.MedianTime</span></td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.MedianThresholdStatus">@Model.GlanceCreateImage.LastMonth.MedianTime</span></td>
+        <td>@Model.GlanceCreateImage.LastDay.MedianTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastDay.MedianThresholdStatus()">@Model.GlanceCreateImage.LastDay.MedianTime()</span></td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.MedianThresholdStatus()">@Model.GlanceCreateImage.LastMonth.MedianTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic 95th Percentile Create Time</td>
-        <td>45 seconds</td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileStatus">@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileTime</span></td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.NinetyFifthPercentileStatus">@Model.GlanceCreateImage.LastMonth.NinetyFifthPercentileTime</span></td>
+        <td>@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileTimeThresholdFormatted()</td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileStatus()">@Model.GlanceCreateImage.LastDay.NinetyFifthPercentileTime()</span></td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.NinetyFifthPercentileStatus()">@Model.GlanceCreateImage.LastMonth.NinetyFifthPercentileTime()</span></td>
     </tr>
     <tr>
         <td>Synthetic Create Failure %</td>
-        <td>2.00%</td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastDay.FailureThresholdStatus">@Model.GlanceCreateImage.LastDay.FailurePercentage%</span></td>
-        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.FailureThresholdStatus">@Model.GlanceCreateImage.LastMonth.FailurePercentage%</span></td>
+        <td>@Model.GlanceCreateImage.LastDay.FailurePercentageThresholdFormatted()%</td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastDay.FailureThresholdStatus()">@Model.GlanceCreateImage.LastDay.FailurePercentage()%</span></td>
+        <td><span class="label label-@Model.GlanceCreateImage.LastMonth.FailureThresholdStatus()">@Model.GlanceCreateImage.LastMonth.FailurePercentage()%</span></td>
     </tr>
 </table>

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using ElasticBenchMetrics.Models;
 using Humanizer;
 using ElasticBenchMetrics.ViewModels;
 using Microsoft.Extensions.Configuration;
-using ElasticBenchMetrics.Configuration;
-using Microsoft.Extensions.Options;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -48,6 +45,7 @@ namespace ElasticBenchMetrics.Controllers
                 NovaBootServer = new ResultHistory(),
                 NovaBootServerStress = new ResultHistory()
             };
+
             foreach (var period in timePeriods)
             {
                 var response = _client.Search<BenchmarkResult>(s => s
@@ -70,20 +68,21 @@ namespace ElasticBenchMetrics.Controllers
                         var scenarios = resultGroup.Where(r => r.TestType == "benchmark");
 
                         var sortedBootTimes = scenarios.OrderBy(o => o.AtomicActions["nova:boot_server"]).ToList();
-                        var medianBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["nova:boot_server"]);
+                        var medianBootTime = sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["nova:boot_server"];
                         var outlierBootTimeIndex = (int)(Math.Ceiling(sortedBootTimes.Count * 0.95) - 1);
-                        var outlierBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["nova:boot_server"]);
+                        var outlierBootTime = sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["nova:boot_server"];
                         var failurePercentage = (scenarios.Where(s => s.Result == "fail").Count() * 100.0) / scenarios.Count();
 
                         var summary = new ResultSummary
                         {
-                            MedianTime = medianBootTime.Humanize(2),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            NinetyFifthPercentileStatus = "success",
-                            FailurePercentage = failurePercentage.ToString("F"),
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianBootTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierBootTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = failurePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
+
                         if (period == lastDay)
                         {
                             metricsOverview.NovaBootServer.LastDay = summary;
@@ -99,19 +98,19 @@ namespace ElasticBenchMetrics.Controllers
                         // Filter for only stress tests
                         var stressScenarios = resultGroup.Where(r => r.TestType == "stress_test");
                         var sortedScenarioTimes = stressScenarios.OrderBy(o => o.TotalRuntime).ToList();
-                        var medianScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime);
+                        var medianScenarioTime = sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime;
                         var scenarioFailurePercentage = (stressScenarios.Where(s => s.Result == "fail").Count() * 100.0) / stressScenarios.Count();
                         var outlierBootTimeIndex = (int)(Math.Ceiling(sortedScenarioTimes.Count * 0.95) - 1);
-                        var outlierBootTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(outlierBootTimeIndex).TotalRuntime);
+                        var outlierBootTime = sortedScenarioTimes.ElementAt(outlierBootTimeIndex).TotalRuntime;
 
                         var summary = new ResultSummary
                         {
-                            MedianTime = medianScenarioTime.Humanize(2),
-                            NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = scenarioFailurePercentage.ToString("F"),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileStatus = "success",
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianScenarioTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierBootTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = scenarioFailurePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
 
                         if (period == lastDay)
@@ -129,19 +128,19 @@ namespace ElasticBenchMetrics.Controllers
                         var scenarios = resultGroup.Where(r => r.TestType == "benchmark");
 
                         var sortedBootTimes = scenarios.OrderBy(o => o.AtomicActions["glance:create_image"]).ToList();
-                        var medianBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["glance:create_image"]);
+                        var medianBootTime = sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["glance:create_image"];
                         var outlierBootTimeIndex = (int)(Math.Ceiling(sortedBootTimes.Count * 0.95) - 1);
-                        var outlierBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["glance:create_image"]);
+                        var outlierBootTime = sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["glance:create_image"];
                         var failurePercentage = (scenarios.Where(s => s.Result == "fail").Count() * 100.0) / scenarios.Count();
 
                         var summary = new ResultSummary
                         {
-                            MedianTime = medianBootTime.Humanize(2),
-                            NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = failurePercentage.ToString("F"),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileStatus = "success",
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianBootTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierBootTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = failurePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
 
                         if (period == lastDay)
@@ -160,35 +159,35 @@ namespace ElasticBenchMetrics.Controllers
                         var scenarios = resultGroup.Where(r => r.TestType == "benchmark");
 
                         var sortedBootTimes = scenarios.OrderBy(o => o.AtomicActions["cinder:create_volume"]).ToList();
-                        var medianBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["cinder:create_volume"]);
+                        var medianBootTime = sortedBootTimes.ElementAt(sortedBootTimes.Count / 2).AtomicActions["cinder:create_volume"];
                         var outlierBootTimeIndex = (int)(Math.Ceiling(sortedBootTimes.Count * 0.95) - 1);
-                        var outlierBootTime = TimeSpan.FromSeconds(sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["cinder:create_volume"]);
+                        var outlierBootTime = sortedBootTimes.ElementAt(outlierBootTimeIndex).AtomicActions["cinder:create_volume"];
                         var failurePercentage = (scenarios.Where(s => s.Result == "fail").Count() * 100.0) / scenarios.Count();
 
                         var createSummary = new ResultSummary
                         {
-                            MedianTime = medianBootTime.Humanize(2),
-                            NinetyFifthPercentileTime = outlierBootTime.Humanize(2),
-                            FailurePercentage = failurePercentage.ToString("F"),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileStatus = "success",
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianBootTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierBootTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = failurePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
 
                         var sortedDeletedTimes = scenarios.OrderBy(o => o.AtomicActions["cinder:delete_volume"]).ToList();
-                        var medianDeleteTime = TimeSpan.FromSeconds(sortedDeletedTimes.ElementAt(sortedDeletedTimes.Count / 2).AtomicActions["cinder:delete_volume"]);
+                        var medianDeleteTime = sortedDeletedTimes.ElementAt(sortedDeletedTimes.Count / 2).AtomicActions["cinder:delete_volume"];
                         var outlierDeleteTimeIndex = (int)(Math.Ceiling(sortedDeletedTimes.Count * 0.95) - 1);
-                        var outlierDeleteTime = TimeSpan.FromSeconds(sortedDeletedTimes.ElementAt(outlierDeleteTimeIndex).AtomicActions["cinder:delete_volume"]);
+                        var outlierDeleteTime = sortedDeletedTimes.ElementAt(outlierDeleteTimeIndex).AtomicActions["cinder:delete_volume"];
                         var failureDeletePercentage = (scenarios.Where(s => s.Result == "fail").Count() * 100.0) / scenarios.Count();
 
                         var deleteSummary = new ResultSummary
                         {
-                            MedianTime = medianDeleteTime.Humanize(2),
-                            NinetyFifthPercentileTime = outlierDeleteTime.Humanize(2),
-                            FailurePercentage = failureDeletePercentage.ToString("F"),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileStatus = "success",
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianDeleteTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierDeleteTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = failureDeletePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
 
                         if (period == lastDay)
@@ -207,19 +206,19 @@ namespace ElasticBenchMetrics.Controllers
                         // Filter for only stress tests
                         var stressScenarios = resultGroup.Where(r => r.TestType == "stress_test");
                         var sortedScenarioTimes = stressScenarios.OrderBy(o => o.TotalRuntime).ToList();
-                        var medianScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime);
+                        var medianScenarioTime = sortedScenarioTimes.ElementAt(sortedScenarioTimes.Count() / 2).TotalRuntime;
                         var scenarioFailurePercentage = (stressScenarios.Where(s => s.Result == "fail").Count() * 100.0) / stressScenarios.Count();
                         var outlierScenarioTimeIndex = (int)(Math.Ceiling(sortedScenarioTimes.Count * 0.95) - 1);
-                        var outlierScenarioTime = TimeSpan.FromSeconds(sortedScenarioTimes.ElementAt(outlierScenarioTimeIndex).TotalRuntime);
+                        var outlierScenarioTime = sortedScenarioTimes.ElementAt(outlierScenarioTimeIndex).TotalRuntime;
 
                         var summary = new ResultSummary
                         {
-                            MedianTime = medianScenarioTime.Humanize(2),
-                            NinetyFifthPercentileTime = outlierScenarioTime.Humanize(2),
-                            FailurePercentage = scenarioFailurePercentage.ToString("F"),
-                            MedianThresholdStatus = "success",
-                            NinetyFifthPercentileStatus = "success",
-                            FailureThresholdStatus = "success"
+                            RawMedianTime = medianScenarioTime,
+                            MedianTimeThreshold = 6.0,
+                            RawNinetyFifthPercentileTime = outlierScenarioTime,
+                            NinetyFifthPercentileTimeThreshold = 10.0,
+                            RawFailurePercentage = scenarioFailurePercentage,
+                            FailurePercentageThreshold = 2.0
                         };
 
                         if (period == lastDay)
