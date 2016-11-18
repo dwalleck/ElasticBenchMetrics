@@ -25,7 +25,7 @@ namespace ElasticBenchMetrics.Controllers
             settings.BasicAuthentication(
                 configuration["ElasticSearch:Username"],
                 configuration["ElasticSearch:Password"]);
-            _client = new ElasticClient(settings);  
+            _client = new ElasticClient(settings);
         }
 
         // GET: /<controller>/
@@ -49,16 +49,16 @@ namespace ElasticBenchMetrics.Controllers
             foreach (var period in timePeriods)
             {
                 var response = _client.Search<BenchmarkResult>(s => s
-                    .Size(10000)
+                    .Size(5000)
                     .Query(q => q
                         .DateRange(d => d
                             .Field(f => f.RunAt).GreaterThanOrEquals(DateTime.Today.AddDays(period))))
-                    
+
                 );
 
                 var results = response.Documents;
                 var resultsByScenario = results.GroupBy(r => r.ScenarioName);
-                
+
                 foreach (var resultGroup in resultsByScenario)
                 {
                     var scenarioName = resultGroup.Key;
@@ -91,7 +91,7 @@ namespace ElasticBenchMetrics.Controllers
                         {
                             metricsOverview.NovaBootServer.LastMonth = summary;
                         }
-                        
+
                     }
                     else if (scenarioName == "NovaServers.boot_and_delete_server_stress")
                     {
@@ -234,11 +234,23 @@ namespace ElasticBenchMetrics.Controllers
                     {
                         continue;
                     }
-                  }
+                }
 
             }
 
             return View(metricsOverview);
+        }
+
+        public IActionResult Details()
+        {
+            var response = _client.Search<BenchmarkResult>(s => s
+                    .Size(5000)
+                    .Query(q => q
+                        .DateRange(d => d
+                            .Field(f => f.RunAt).GreaterThanOrEquals(DateTime.Today)))
+
+            );
+            return View();
         }
     }
 }
